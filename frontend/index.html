@@ -11,9 +11,40 @@
 <script src="js/bootstrap.js"></script>
 <body class="bg-dark">
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contactModal">
-    Add new contact
-</button>
+<div class="container bg-light vh-100 rounded">
+
+    <div class="d-flex flex-row">
+
+        <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#contactModal">
+            Add new contact
+        </button>
+
+        <div id="searchArea">
+            <div></div>
+        </div>
+
+    </div>
+
+    <table class="table" ng-app="contactList" ng-controller="contactListController">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Full name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone #</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="entry in contacts">
+            <td>{{ entry.number }}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.email }}</td>
+            <td>{{ entry.phone }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
 
 <div class="modal fade" id="contactModal" tabindex="-1" role="form" aria-labelledby="contactModalLabel"
      aria-hidden="true">
@@ -56,7 +87,18 @@
     </div>
 </div>
 
-<script
+<script>
+    let listApp = angular.module('contactList', []);
+
+    listApp.controller('contactListController', function ($scope, $http) {
+        $http.get('') // TODO: Add Node.js address
+        .then(function (response) {
+            $scope.contacts = response.data.records;
+        });
+    });
+
+
+</script>
 
 </body>
 </html>
