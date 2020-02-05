@@ -92,3 +92,5 @@ typings/
 *.iml
 
 *.map
+
+package-lock.json

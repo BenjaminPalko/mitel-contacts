@@ -13,16 +13,29 @@
 
 <div class="container bg-light vh-100 rounded">
 
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-row justify-content-between">
 
         <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#contactModal">
             Add new contact
         </button>
 
-        <div id="searchArea">
-            <div></div>
+        <div class=" my-3">
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            </form>
         </div>
 
+    </div>
+
+    <div class="collapse" id="settingsCollapse">
+        <div class="card card-body">
+            <div class="d-flex flex-row justify-content-around">
+                <div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <table class="table" ng-app="contactList" ng-controller="contactListController">
@@ -36,7 +49,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="entry in contacts">
-            <td>{{ entry.number }}</td>
+            <td>{{ entry.id }}</td>
             <td>{{ entry.name }}</td>
             <td>{{ entry.email }}</td>
             <td>{{ entry.phone }}</td>
@@ -56,25 +69,28 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" action="/">
+            <form method="post" action="http://localhost:3000/add">
                 <div class="modal-body">
                     <div class="d-flex flex-row justify-content-center" ng-app="add-contact">
                         <div>
                             <div class="form-group">
                                 <label for="nameInput">Name:</label>
-                                <input type="text" class="form-text text-muted" id="nameInput" placeholder="Full name">
+                                <input type="text" class="form-text text-muted" id="nameInput" placeholder="Full name"
+                                       name="name">
                             </div>
                             <div class="form-group">
                                 <label for="emailInput">Email:</label>
                                 <input type="email" class="form-text text-muted" id="emailInput"
-                                       aria-describedby="emailHelp" placeholder="Enter email">
+                                       aria-describedby="emailHelp" placeholder="Enter email"
+                                       pattern="/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" name="email">
                                 <small id="emailHelp" class="form-text text-muted">I won't share your email I swear...
                                     ;)</small>
                             </div>
                             <div class="form-group">
                                 <label for="phoneInput">Phone Number:</label>
-                                <input type="tel" class="form-text text-muted" id="phoneInput" placeholder="(XXX)-YYY-ZZZZ"
-                                       pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                                <input type="tel" class="form-text text-muted" id="phoneInput"
+                                       placeholder="(XXX)-YYY-ZZZZ"
+                                       pattern="[0-9]{3}-{0-1}[0-9]{3}-{0-1}[0-9]{4}" name="phone">
                             </div>
                         </div>
                     </div>
@@ -91,11 +107,13 @@
     let listApp = angular.module('contactList', []);
 
     listApp.controller('contactListController', function ($scope, $http) {
-        $http.get('') // TODO: Add Node.js address
-        .then(function (response) {
-            $scope.contacts = response.data.records;
-        });
+        $http.get('http://localhost:3000/') // TODO: Add Node.js address
+            .then(function (response) {
+                console.log(response);
+                $scope.contacts = response.data;
+            });
     });
+
 
 
 </script>
