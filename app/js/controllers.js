@@ -18,7 +18,7 @@ angular.module('MitelContacts').controller('ModalInstanceCtrl', function ($scope
 
     $scope.submit = function () {
         $http({
-            url: 'http://localhost:3000/add',
+            url: '/add',
             method: 'POST',
             data: {
                 name: $scope.name,
@@ -43,7 +43,7 @@ app.controller('ContactController', function ($scope, $http) {
 
     $scope.getContacts = function () {
         $http({
-            url: "http://localhost:3000/",
+            url: "/Results",
             method: "GET",
         }).then(function (response) {
             $scope.contacts = response.data;
@@ -58,7 +58,7 @@ app.controller('ContactController', function ($scope, $http) {
         }
 
         $http({
-            url: "http://localhost:3000/nResults",
+            url: "/nResults",
             method: "POST",
             data: {
                 limit: $scope.limit

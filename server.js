@@ -1,18 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+const port = 8080;
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_SCHEMA,
-    password: process.env.DB_PASS,
-    port: process.env.DB_PORT,
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASS,
+    port: process.env.PG_PORT,
 });
 
 app.use(
+    express.static(__dirname + '/app'),
     bodyParser.json(),
     bodyParser.urlencoded({
         extended: true,
@@ -29,7 +30,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/', (request, response) => {
+app.get('/Results', (request, response) => {
 
     pool.query('SELECT * FROM contacts ORDER BY id ASC', (error, results) => {
         if (error) {
@@ -74,6 +75,10 @@ app.post('/add', (request, response) => {
         response.status(400);
     }
 
+});
+
+app.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname + '/app', 'index.html'))
 });
 
 
