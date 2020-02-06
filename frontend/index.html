@@ -12,11 +12,11 @@
 <link rel="stylesheet" href="css/bootstrap-reboot.css"/>
 <body class="bg-dark">
 
-<div class="container bg-light vh-100 rounded" ng-app="MitelContacts" ng-controller="ContactController">
+<div class="container bg-light h-100 rounded" ng-app="MitelContacts" ng-controller="ContactController">
 
     <div class="d-flex flex-row justify-content-between py-3">
 
-        <div ng-controller="ContactModalCtrl as $ctrl">
+        <div class="modal-controller" ng-controller="ContactModalCtrl">
             <script type="text/ng-template" id="ContactModalContent.html">
 
                 <div class="modal-header">
@@ -26,7 +26,7 @@
                     </button>
                 </div>
 
-                <form ng-submit="$ctrl.submit()">
+                <form ng-submit="submit()">
                     <div class="modal-body d-flex flex-row justify-content-center" id="modal-body">
                         <div>
 
@@ -65,7 +65,7 @@
 
             </script>
 
-            <button type="button" class="btn btn-primary" ng-click="$ctrl.open()">Add new contact</button>
+            <button type="button" class="btn btn-primary" ng-click="open()">Add new contact</button>
         </div>
 
 

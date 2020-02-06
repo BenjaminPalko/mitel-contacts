@@ -1,26 +1,22 @@
 let app = angular.module('MitelContacts', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
 
-app.controller('ContactModalCtrl', function ($scope, $http, $uibModal) {
+app.controller('ContactModalCtrl', function ($scope, $http, $uibModal, $document) {
 
-    let $ctrl = this;
-
-    $ctrl.open = function () {
+    $scope.open = function () {
         $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
             templateUrl: 'ContactModalContent.html',
             controller: 'ModalInstanceCtrl',
-            controllerAs: '$ctrl',
+            scope: $scope
         })
     }
 });
 
 angular.module('MitelContacts').controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance) {
 
-    let $ctrl = this;
-
-    $ctrl.submit = function () {
+    $scope.submit = function () {
         $http({
             url: 'http://localhost:3000/add',
             method: 'POST',
@@ -37,7 +33,7 @@ angular.module('MitelContacts').controller('ModalInstanceCtrl', function ($scope
             $uibModalInstance.close()
         });
     };
-    $ctrl.close = function () {
+    $scope.close = function () {
         $uibModalInstance.close()
     }
 });
