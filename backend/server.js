@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
 
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type', 'application/json');
 
     res.setHeader('Access-Control-Allow-Credentials', true);
 
@@ -30,25 +30,47 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', (request, response) => {
+
     pool.query('SELECT * FROM contacts ORDER BY id ASC', (error, results) => {
-        if(error) {
+        if (error) {
             throw error;
         }
         response.status(200).json(results.rows);
     })
 });
 
+app.post('/nResults', (request, response) => {
+    console.log(request.body);
+    const {limit} = request.body;
+
+    if (limit && limit > 0) {
+        pool.query('SELECT * FROM contacts ORDER BY id ASC LIMIT $1', [limit], (error, results) => {
+            if (error) {
+                throw error;
+            }
+            response.status(200).json(results.rows);
+        })
+    } else {
+        console.log('Results number must be defined and non-zero');
+        response.status(400)
+    }
+});
+
 app.post('/add', (request, response) => {
-    const { name, email, phone } = request.body;
-    if(name && email && phone) {
-        pool.query('INSERT INTO contacts (name, email, phone) VALUES ($1, $2, $3)', [name, email, phone], (error, result) => {
-            if(error) {
+    console.log(request.body);
+    const {name, email, phone} = request.body;
+
+    if (name && email && phone) {
+        let phoneTrim = phone.replace('-', '');
+
+        pool.query('INSERT INTO contacts (name, email, phone) VALUES ($1, $2, $3)', [name, email, phoneTrim], (error, result) => {
+            if (error) {
                 throw error;
             }
             response.status(201).send('Contact added with id' + result.id);
         })
     } else {
-        console.log('Missing or empty parameters');
+        console.log('Missing or empty parameter');
         response.status(400);
     }
 
