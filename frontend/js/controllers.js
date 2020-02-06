@@ -1,5 +1,46 @@
+let app = angular.module('MitelContacts', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
 
-let app = angular.module('MitelContacts', []);
+app.controller('ContactModalCtrl', function ($scope, $http, $uibModal) {
+
+    let $ctrl = this;
+
+    $ctrl.open = function () {
+        $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'ContactModalContent.html',
+            controller: 'ModalInstanceCtrl',
+            controllerAs: '$ctrl',
+        })
+    }
+});
+
+angular.module('MitelContacts').controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance) {
+
+    let $ctrl = this;
+
+    $ctrl.submit = function () {
+        $http({
+            url: 'http://localhost:3000/add',
+            method: 'POST',
+            data: {
+                name: $scope.name,
+                email: $scope.email,
+                phone: $scope.phone,
+            },
+            headers: {'Content-Type': 'application/json'},
+        }).then(function () {
+            setTimeout(() => {
+                $scope.getContacts()
+            }, 300);
+            $uibModalInstance.close()
+        });
+    };
+    $ctrl.close = function () {
+        $uibModalInstance.close()
+    }
+});
 
 
 app.controller('ContactController', function ($scope, $http) {
@@ -15,12 +56,12 @@ app.controller('ContactController', function ($scope, $http) {
 
     $scope.getNContacts = function () {
 
-        if(!$scope.limit || $scope.limit === 0) {
+        if (!$scope.limit || $scope.limit === 0) {
             $scope.getContacts();
             return;
         }
 
-       $http({
+        $http({
             url: "http://localhost:3000/nResults",
             method: "POST",
             data: {
@@ -30,20 +71,6 @@ app.controller('ContactController', function ($scope, $http) {
         }).then(function (response) {
             $scope.contacts = response.data;
         });
-    };
-
-    $scope.postContact = function () {
-        $http({
-            url: 'http://localhost:3000/add',
-            method: 'POST',
-            data: {
-                name: $scope.name,
-                email: $scope.email,
-                phone: $scope.phone,
-            },
-            headers: {'Content-Type': 'application/json'},
-        });
-        setTimeout(() => {$scope.getContacts()}, 300)
     };
 
 });

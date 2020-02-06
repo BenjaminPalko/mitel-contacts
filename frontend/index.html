@@ -1,23 +1,72 @@
 <!DOCTYPE html>
 <html>
 
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-animate.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-sanitize.js"></script>
+<script src="//morgul.github.io/ui-bootstrap4/ui-bootstrap-tpls-3.0.6.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+
 <link rel="stylesheet" href="css/bootstrap.css"/>
 <link rel="stylesheet" href="css/bootstrap-grid.css"/>
 <link rel="stylesheet" href="css/bootstrap-reboot.css"/>
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-<script src="js/jquery-3.4.1.min.js"></script>
-<script src="js/bootstrap.bundle.js"></script>
-<script src="js/bootstrap.js"></script>
 <body class="bg-dark">
 
 <div class="container bg-light vh-100 rounded" ng-app="MitelContacts" ng-controller="ContactController">
 
     <div class="d-flex flex-row justify-content-between py-3">
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contactModal">
-            Add new contact
-        </button>
+        <div ng-controller="ContactModalCtrl as $ctrl">
+            <script type="text/ng-template" id="ContactModalContent.html">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Add new contact</h5>
+                    <button type="button" class="close" aria-label="close" ng-click="close()">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <form ng-submit="$ctrl.submit()">
+                    <div class="modal-body d-flex flex-row justify-content-center" id="modal-body">
+                        <div>
+
+                            <div class="form-group">
+                                <label for="nameInput">Name:</label>
+                                <input type="text" class="form-text text-muted" id="nameInput" placeholder="Full name"
+                                       ng-model="name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emailInput">Email:</label>
+                                <input type="email" class="form-text text-muted" id="emailInput"
+                                       aria-describedby="emailHelp" placeholder="Enter email"
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                       ng-model="email">
+                                <small id="emailHelp" class="form-text text-muted">Your email is secured</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneInput">Phone Number:</label>
+                                <input type="tel" class="form-text text-muted" id="phoneInput"
+                                       placeholder="(XXX)-YYY-ZZZZ" pattern="([0-9]{3}-[0-9]{3}-[0-9]{4})|([0-9]{10})"
+                                       ng-model="phone">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-outline-warning">Clear</button>
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </div>
+
+                </form>
+
+            </script>
+
+            <button type="button" class="btn btn-primary" ng-click="$ctrl.open()">Add new contact</button>
+        </div>
 
 
         <form class="form-inline" ng-submit="getNContacts()">
@@ -50,57 +99,6 @@
         </tr>
         </tbody>
     </table>
-
-
-    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="contactModalLabel">Add new contact</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <form ng-submit="postContact();">
-                    <div class="modal-body d-flex flex-row justify-content-center">
-                        <div>
-                            <div class="form-group">
-                                <label for="nameInput">Name:</label>
-                                <input type="text" class="form-text text-muted" id="nameInput" placeholder="Full name"
-                                       ng-model="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="emailInput">Email:</label>
-                                <input type="email" class="form-text text-muted" id="emailInput"
-                                       aria-describedby="emailHelp" placeholder="Enter email"
-                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                       ng-model="email">
-                                <small id="emailHelp" class="form-text text-muted">You email is secured</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="phoneInput">Phone Number:</label>
-                                <input type="tel" class="form-text text-muted" id="phoneInput"
-                                       placeholder="(XXX)-YYY-ZZZZ" pattern="([0-9]{3}-[0-9]{3}-[0-9]{4})|([0-9]{10})"
-                                       ng-model="phone">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button type="reset" class="btn btn-outline-warning">Clear</button>
-                        <button type="submit" class="btn btn-primary float-right" onclick="$('#contactModal').modal('hide');">Submit
-                        </button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-    </div>
 
 </div>
 
